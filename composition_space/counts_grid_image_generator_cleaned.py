@@ -30,9 +30,9 @@ def get_eah(mpid):
 
 # Open dfs, merge them, and segment those that were classified as hits
 thresh = 0.1
-df_binaries = pd.read_pickle("/home/jovyan/catlas-paper-figures/processing/outputs/post_processed_catlas_data_20220701_vals_2.pkl")
+df_binaries = pd.read_pickle("../processing/outputs/post_processed_catlas_data_20220701_vals_2.pkl")
 
-with open("/home/jovyan/catlas-paper-figures/2d_histograms/e_above_hull_info.pkl", "rb") as f:
+with open("../e_above_hull/e_above_hull_info.pkl", "rb") as f:
     eah = pickle.load(f)
 df_binaries["e_above_hull"] = df_binaries.bulk_mpid.apply(get_eah)
 df_binaries = df_binaries[df_binaries.e_above_hull <= 0.1]
@@ -44,7 +44,7 @@ df_binaries_hits = df_binaries[df_binaries.hit >= thresh]
 df_binaries_111 = df_binaries[df_binaries["111-like"]]
 df_hits_and_111 = df_binaries_hits[df_binaries_hits["111-like"]]
 
-df_unaries = pd.read_pickle('/home/jovyan/catlas-paper-figures/processing/outputs/post_processed_catlas_data_unary_20220630.pkl')
+df_unaries = pd.read_pickle('../processing/outputs/post_processed_catlas_data_unary_20220630.pkl')
 df_unaries["wanted"] = df_unaries.bulk_elements.apply(filter_unwanted_els)
 df_unaries["e_above_hull"] = df_unaries.bulk_mpid.apply(get_eah)
 df_unaries = df_unaries[df_unaries.e_above_hull <= 0.1]
