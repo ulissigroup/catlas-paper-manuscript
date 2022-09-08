@@ -37,15 +37,15 @@ def get_eah(mpid):
     return eah[mpid]["e_above_hull"]
     
 
-with open("/home/jovyan/catlas-paper-figures/2d_histograms/e_above_hull_info.pkl", "rb") as f:
+with open("../e_above_hull/e_above_hull_info.pkl", "rb") as f:
     eah = pickle.load(f)
 
 
 # Open dfs, merge them, and segment those that were classified as hits
-df_binaries = pd.read_pickle("/home/jovyan/catlas-paper-figures/processing/outputs/post_processed_catlas_data_20220701_vals_2.pkl")
+df_binaries = pd.read_pickle("../processing/outputs/post_processed_catlas_data_20220701_vals_2.pkl")
 df_binaries["e_above_hull"] = df_binaries.bulk_mpid.apply(get_eah)
 df_binaries = df_binaries[df_binaries.e_above_hull <= 0.1]
-df_unaries = pd.read_pickle('/home/jovyan/catlas-paper-figures/processing/outputs/post_processed_catlas_data_unary_20220630.pkl')
+df_unaries = pd.read_pickle('../processing/outputs/post_processed_catlas_data_unary_20220630.pkl')
 df_unaries["e_above_hull"] = df_unaries.bulk_mpid.apply(get_eah)
 df_unaries = df_unaries[df_unaries.e_above_hull <= 0.1]
 # df_unaries.rename(columns = {"min_dE_gemnet_t_direct_h512": "x_min_energy"}, inplace = True)
@@ -94,55 +94,6 @@ all_111_like_surface_els = df_binaries_111.bulk_elements.tolist()
 for combo in el_combos_all:
     if not compare_sublists(combo, all_111_like_surface_els):
         combos_no111.append(combo) 
-
-# # Construct a grid
-# grid = np.empty((len(elements), len(elements)))
-# grid[:] = np.nan
-
-# for entry in el_combos_all:
-#     x1 = elements.index(entry[0])
-#     x2 = elements.index(entry[1])
-#     if entry[0]+entry[1] in dist_lookup_dict:
-#         if dist_lookup_dict[entry[0]+entry[1]] <= 1:
-#             grid[x1,x2] = dist_lookup_dict[entry[0]+entry[1]]
-#             grid[x2,x1] = dist_lookup_dict[entry[0]+entry[1]]
-            
-# for idx, element in enumerate(elements):
-#     if df_unaries_g[element] < 1:
-#         grid[idx,idx] = df_unaries_g[element]
-        
-#  # Set combos not appearing as stable in MP as -10 so they appear dark grey
-# for entry in combos_not_in_MP:
-#     x1 = elements.index(entry[0])
-#     x2 = elements.index(entry[1])
-#     grid[x1,x2] = -10
-#     grid[x2,x1] = -10
-    
-# # Set combos w/o 111 surfaces as 20 so they appear light grey
-# for entry in combos_no111:
-#     x1 = elements.index(entry[0])
-#     x2 = elements.index(entry[1])
-#     if grid[x1,x2] != -10:
-#         grid[x1,x2] = -10
-#         grid[x2,x1] = -10
-        
-# # Sort the grid
-# sums = []
-# for row_idx in range(len(elements)):
-#     sum_now = []
-#     count = 0
-#     for col_idx in range(len(elements)):
-#         if np.isnan(grid[row_idx,col_idx]):
-#             sum_now +=[1]
-#             count+=1
-#         elif grid[row_idx,col_idx] > -10:
-#             sum_now+= [grid[row_idx,col_idx]]
-#             count+=1
-#     sums.append(min(sum_now))
-# print(sums)
-# sorted_indices = np.argsort(sums)
-# sorted_elements = [elements[idx] for idx in sorted_indices]
-# # sorted_elements = sorted_elements[::-1]
 
 sorted_elements = ['Pt', 'Ti', 'Re', 'Ni', 'Nb', 'Ru', 'Mo', 'Rh', 'V', 'Zn', 'Ir', 'Pd', 'Mn', 'Os', 'Cr', 'Co', 'Fe', 'Zr', 'Hf', 'W', 'Ta', 'Sc', 'Cu', 'Y', 'Cd', 'Hg', 'Au', 'Ag']
 
